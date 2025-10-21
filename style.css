@@ -1,0 +1,529 @@
+/* Base Layout and Body Styles */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  transition: background-color 0.3s ease; /* Smooth background change per turn */
+}
+
+/* Typography and Headings */
+h1 {
+  margin-top: 5px;
+  color: #badfdb;
+  text-align: center;
+}
+
+#turnIndicator {
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  color: #f1f0e8;
+}
+
+/* Grid and Game Board Layout */
+.grid-container {
+  width: 100%; /* Responsive container */
+  overflow: auto; /* Allow horizontal scroll if grid overflows */
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(70px, 1fr)); /* 6x6 grid */
+  grid-template-rows: repeat(6, minmax(70px, 1fr));
+  gap: 10px;
+  margin: 0 auto;
+  width: fit-content; /* Grid adjusts to content width */
+}
+
+/* Game Cells */
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  border: 2px solid #999;
+  min-width: 70px;
+  min-height: 70px;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+}
+
+/* Player Markers */
+.marker {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-out;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.marker.moving {
+  z-index: 10;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Fade-in for appearing markers */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Marker variation for multi-dot display */
+.marker.multi-dot {
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(2, auto);
+  gap: 3px;
+  padding: 4px;
+}
+
+/* Individual small dots inside multi-dot marker */
+.marker .score-dot {
+  width: 11px;
+  height: 11px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+/* Player Colors and Glow */
+.player1 {
+  background-color: blue;
+  box-shadow: 0 0 12px rgba(0, 0, 255, 0.5);
+}
+
+.player2 {
+  background-color: red;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
+}
+
+/* Cell Flash Animations */
+@keyframes cellFlashBlue {
+  0% {
+    background-color: #a3c4ff;
+  }
+  100% {
+    background-color: #dce9ff;
+  }
+}
+
+@keyframes cellFlashRed {
+  0% {
+    background-color: #ffb3b3;
+  }
+  100% {
+    background-color: #ffe1e1;
+  }
+}
+
+/* Active Cell States */
+.cell.player1-cell {
+  animation: cellFlashBlue 0.4s ease-out forwards;
+  background-color: #5f8ee0;
+}
+
+.cell.player2-cell {
+  animation: cellFlashRed 0.4s ease-out forwards;
+  background-color: #de6666;
+}
+
+/* Body color changes depending on turn */
+body.player1-turn {
+  background-color: #4a91e2;
+}
+body.player2-turn {
+  background-color: #e35353;
+}
+
+/* Score Display Layout */
+.score-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Score layout variations */
+.score-1 {
+  flex-direction: column;
+  gap: 10px;
+}
+.score-2 {
+  flex-direction: row;
+  gap: 10px;
+}
+
+/* Grid-based multi-dot score styles */
+.score-3,
+.score-4 {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  height: 100%;
+}
+
+.score-3 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.5px;
+  padding: 2px 0 6px 4px;
+}
+
+/* Dot arrangement for score-3 pattern */
+.score-3 .score-dot:nth-child(1) {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+.score-3 .score-dot:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.score-3 .score-dot:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* 2x2 grid for four dots */
+.score-4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5px;
+  padding: 2px 0 0 1px;
+}
+
+/* Common dot size for score-3 and score-4 */
+.score-3 .score-dot,
+.score-4 .score-dot {
+  width: 11px;
+  height: 11px;
+}
+
+/* Winner Display Modal */
+#winnerDisplay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(216 213 196 / 95%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 100;
+  max-width: 80%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+#winnerMessage {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#playAgainButton {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+#playAgainButton:hover {
+  background-color: #45a049;
+}
+
+/* Utility and State Classes */
+.hidden {
+  display: none !important;
+}
+.player1-win,
+.blue-win {
+  color: blue;
+}
+.player2-win,
+.red-win {
+  color: red;
+}
+
+/* Scoreboard Box */
+#scoreBoard.score-box {
+  background: #fff0dc;
+  color: #222;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* Inline score coloring and layout */
+.score-num.red {
+  color: #e53935;
+  font-weight: bold;
+}
+.score-num.blue {
+  color: #2196f3;
+  font-weight: bold;
+}
+.score-label {
+  font-weight: 500;
+}
+.score-sep {
+  color: #bbb;
+}
+
+/* Dots within scoreboard */
+.score-dots {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  min-width: 20px;
+}
+.score-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 2px;
+  background-color: #ccc;
+}
+.score-dot.blue {
+  background-color: #2196f3;
+}
+.score-dot.red {
+  background-color: #e53935;
+}
+
+.dot-score {
+  margin-left: 6px;
+  font-size: 1em;
+  color: #888;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+
+/* Tablets / Laptops */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  #turnIndicator {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 15vw);
+    grid-template-rows: repeat(6, 15vw);
+    gap: 2vw;
+  }
+
+  .cell {
+    width: 95%;
+    height: 95%;
+    border-width: 1px;
+  }
+  .marker {
+    width: 10vw;
+    height: 10vw;
+  }
+  .marker .score-dot {
+    width: 3vw;
+    height: 3vw;
+  }
+
+  #winnerMessage {
+    font-size: 2rem;
+  }
+  #playAgainButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* Phones (≤480px) */
+@media (max-width: 480px) {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .grid-container {
+    padding: 0;
+    margin: 0 auto;
+    width: 96vw;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    gap: 1.5vw;
+    box-sizing: border-box;
+  }
+
+  .cell {
+    width: 95%;
+    height: 95%;
+    min-width: unset;
+    min-height: unset;
+    border-radius: 8px;
+  }
+
+  .marker {
+    width: 12vw;
+    height: 12vw;
+  }
+  .marker .score-dot {
+    width: 3vw;
+    height: 3vw;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  #turnIndicator {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  #winnerDisplay {
+    padding: 20px;
+    width: 90vw;
+  }
+  #winnerMessage {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  #playAgainButton {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Very Small Devices (≤320px) */
+@media (max-width: 320px) {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .grid-container {
+    width: 100vw;
+    padding: 0 2vw;
+    box-sizing: border-box;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    gap: 1vw;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cell {
+    width: 95%;
+    height: 95%;
+    border-width: 1px;
+    border-radius: 6px;
+  }
+
+  .marker {
+    width: 9vw;
+    height: 9vw;
+  }
+  .marker .score-dot {
+    width: 2.4vw;
+    height: 2.4vw;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    margin: 5px 0;
+  }
+  #turnIndicator {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+  }
+
+  #winnerDisplay {
+    padding: 12px;
+    width: 95vw;
+  }
+  #winnerMessage {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  #playAgainButton {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Landscape or Short Screens */
+@media (max-height: 400px) {
+  h1 {
+    margin: 5px 0;
+    font-size: 1.2rem;
+  }
+  #turnIndicator {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 13vh);
+    grid-template-rows: repeat(6, 13vh);
+    gap: 1vh;
+  }
+
+  .cell {
+    width: 95%;
+    height: 95%;
+  }
+  .marker {
+    width: 7vh;
+    height: 7vh;
+  }
+}

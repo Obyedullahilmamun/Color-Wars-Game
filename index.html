@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Wars - A 2 Player Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Color Wars</h1>
+
+    <!-- Displays current player's turn -->
+    <div id="turnIndicator">Player 1's Turn (Blue)</div>
+
+    <!-- Scoreboard showing both players' scores -->
+    <div id="scoreBoard" class="score-box">
+      <span class="score-label"></span>
+      <span id="player1ScoreNum" class="score-num"></span>
+      <span id="player1DotScore" class="dot-score"></span>
+      <span class="score-sep">|</span>
+      <span class="score-label"></span>
+      <span id="player2ScoreNum" class="score-num"></span>
+      <span id="player2DotScore" class="dot-score"></span>
+    </div>
+
+    <!-- Game grid and winner display -->
+    <div class="grid" id="gameGrid"></div>
+    <div id="winnerDisplay" class="hidden">
+      <div id="winnerMessage"></div>
+      <button id="playAgainButton">Play Again</button>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

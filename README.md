@@ -13,5 +13,5 @@
 ## Made With
 - HTML, CSS, JavaScript  
 
-## About Me
-This game was created by Md Obyedullahil Mamun as a fun project to practice web development and make interactive games.
+## Developer
+Developed by Md Obyedullahil Mamun as a personal project to practice web development and make interactive games.

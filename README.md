@@ -4,10 +4,10 @@
 
 ## Features
 ```
-- 2-player turn based game  
-- Shows scores in real-time  
-- Works on both desktop and mobile  
-- Displays winner and allows replay  
+- 2-player, turn based game  
+- Displays real-time scores 
+- Fully responsive on desktop and mobile  
+- Displays the winner with a replay option  
 ```
 
 ## Made With
